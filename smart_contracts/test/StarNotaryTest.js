@@ -25,6 +25,10 @@ contract('StarNotary', accounts => {
             assert.equal(tx.logs[0].args.to, defaultUser)
         })
 
+        it('can map starId with defaultUser', async function() {
+            assert.equal(await this.contract.ownerOf(starId), defaultUser)
+        })
+
         it('can create a star and get its name', async function () {
             let result = await this.contract.tokenIdToStarInfo(starId)
 
