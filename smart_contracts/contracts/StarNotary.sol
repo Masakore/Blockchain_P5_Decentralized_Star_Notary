@@ -6,17 +6,21 @@ contract StarNotary is ERC721 {
 
     struct Star {
         string name;
+        string story;
+        string cent;
         string dec;
         string mag;
-        string cent;
-        string story;
     }
 
     mapping(uint256 => Star) public tokenIdToStarInfo;
     mapping(uint256 => uint256) public starsForSale;
 
-    function createStar(string _name, uint256 _tokenId) public {
-        Star memory newStar = Star(_name);
+    function mint(address _to, uint256 _tokenId) internal {
+      _mint(_to, _tokenId);
+    }
+
+    function createStar(string _name, string _story, string _cent, string _dec, string _mag, uint256 _tokenId) public {
+        Star memory newStar = Star(_name, _story, _cent, _dec, _mag);
 
         tokenIdToStarInfo[_tokenId] = newStar;
 
@@ -46,14 +50,17 @@ contract StarNotary is ERC721 {
         }
     }
 
-    function checkIfStarExist() {}
-    function mint() {}
-    function approve() {}
-    function safeTransferFrom() {}
-    function SetApprovalForAll() {}
-    function getApproved() {}
-    function isApprovedForAll() {}
-    function ownerOf() {}
-    function starsForSale() {}
-    function tokenIdToStarInfo() {}
+    /* function checkIfStarExist() {} */
+    /* function approve() {} */
+    /* function safeTransferFrom() {} */
+    /* function SetApprovalForAll() {} */
+    /* function getApproved() {} */
+    /* function isApprovedForAll() {} */
+
+    /* function ownerOf(uint256 _tokenId) public view returns (address) {
+      return ownerOf(_tokenId);
+    } */
+
+    /* function starsForSale() {} */
+    /* function tokenIdToStarInfo() {} */
 }
