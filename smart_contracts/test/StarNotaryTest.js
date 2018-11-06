@@ -29,10 +29,14 @@ contract('StarNotary', accounts => {
             assert.equal(await this.contract.ownerOf(starId), defaultUser)
         })
 
-        it('can create a star and get its name', async function () {
+        it('can create a star and get its info', async function () {
             let result = await this.contract.tokenIdToStarInfo(starId)
 
             assert.equal(result[0], name)
+            assert.equal(result[1], story)
+            assert.equal(result[2], cent)
+            assert.equal(result[3], dec)
+            assert.equal(result[4], mag)
         })
     })
 
