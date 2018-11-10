@@ -50,15 +50,29 @@ contract StarNotary is ERC721 {
         }
     }
 
-    /* function checkIfStarExist() {} */
+    /* function checkIfStarExist(uint256 ) public view returns (bool){
+
+    } */
+
     function safeTransferFrom(address _from, address _to, uint256 _tokenId) public {
         ERC721.safeTransferFrom(_from, _to, _tokenId);
     }
 
-    /* function approve() {} */
-    /* function SetApprovalForAll() {} */
-    /* function getApproved() {} */
-    /* function isApprovedForAll() {} */
+    function approve(address _to, uint256 _tokenId) public {
+      ERC721.approve(_to, _tokenId);
+    }
+
+    function setApprovalForAll(address _to, bool _approved) public {
+      ERC721.setApprovalForAll(_to, _approved);
+    }
+
+    function getApproved(uint256 _tokenId) public view returns (address) {
+      return ERC721.getApproved(_tokenId);
+    }
+
+    function isApprovedForAll(address _owner, address _operator) public view returns (bool) {
+      return ERC721.isApprovedForAll(_owner, _operator);
+    }
 
     function ownerOf(uint256 _tokenId) public view returns (address) {
         return ERC721.ownerOf(_tokenId);

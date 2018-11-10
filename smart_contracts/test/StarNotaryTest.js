@@ -84,4 +84,34 @@ contract('StarNotary', accounts => {
             })
         })
     })
+
+    describe('can approve', () => {
+        let user1 = accounts[1]
+        let user2 = accounts[2]
+        let operator = accounts[3]
+
+        let name = 'Star power 103!'
+        let story = 'I love my wonderful star'
+        let cent = 'ra_032.155'
+        let dec = 'dec_121.874'
+        let mag = 'mag_245.978'
+        let starId = 1
+        let starPrice = web3.toWei(.01, "ether")
+
+        beforeEach(async function () {
+            await this.contract.createStar(name, story, cent, dec, mag, starId, {from: user1})
+
+            await this.contract.approve(user2, starId, {from: user1})
+            await this.contract.setApprovalForAll(operator, true, {from: user1})
+        })
+
+        it('user1 can approve user2', async function() {
+          assert.equal(await this.contract.getApproved(starId), user2)
+        })
+
+        it('user1 can set all approval of address he owns for operator', async function() {
+          assert.equal(await this.contract.isApprovedForAll(user1, operator), true)
+        })
+
+    })
 })
