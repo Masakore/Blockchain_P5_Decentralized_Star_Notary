@@ -112,6 +112,28 @@ contract('StarNotary', accounts => {
         it('user1 can set all approval of address he owns for operator', async function() {
           assert.equal(await this.contract.isApprovedForAll(user1, operator), true)
         })
+    })
 
+    describe('can check if a star already exists or not', () => {
+        let user1 = accounts[1]
+        let user2 = accounts[2]
+        let operator = accounts[3]
+
+        let name = 'Star power 103!'
+        let story = 'I love my wonderful star'
+        let cent = 'ra_032.155'
+        let dec = 'dec_121.874'
+        let mag = 'mag_245.978'
+        let starId = 1
+
+        it('return false if no star has been registered', async function() {
+          assert.equal(await this.contract.checkIfStarExist(cent, dec, mag), false)
+        })
+
+        it('return true if the star has been registered', async function() {
+          await this.contract.createStar(name, story, cent, dec, mag, starId)
+
+          assert.equal(await this.contract.checkIfStarExist(cent, dec, mag), true)
+        })
     })
 })

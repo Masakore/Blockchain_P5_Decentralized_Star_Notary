@@ -14,6 +14,7 @@ contract StarNotary is ERC721 {
 
     mapping(uint256 => Star) private _tokenIdToStarInfo;
     mapping(uint256 => uint256) private _starsForSale;
+    Star[] public _starsInUse;
 
     function mint(address _to, uint256 _tokenId) internal {
       _mint(_to, _tokenId);
@@ -22,7 +23,10 @@ contract StarNotary is ERC721 {
     function createStar(string _name, string _story, string _cent, string _dec, string _mag, uint256 _tokenId) public {
         Star memory newStar = Star(_name, _story, _cent, _dec, _mag);
 
+        checkIfStarExist(_cent, _dec, _mag);
+
         _tokenIdToStarInfo[_tokenId] = newStar;
+        _starsInUse.push(newStar);
 
         _mint(msg.sender, _tokenId);
     }
@@ -50,9 +54,18 @@ contract StarNotary is ERC721 {
         }
     }
 
-    /* function checkIfStarExist(uint256 ) public view returns (bool){
+    function checkIfStarExist(string _cent, string _dec, string _mag) public view returns (bool){
+        if (_starsInUse.length == 0) {
+          return false;
+        }
 
-    } */
+        for (uint i = 0; i < _starsInUse.length; i++) {
+          if (keccak256(_starsInUse[i].cent) == keccak256(_cent) && keccak256(_starsInUse[i].dec) == keccak256(_dec) && keccak256(_starsInUse[i].mag) == keccak256(_mag)) {
+            return true;
+          }
+        }
+        return false;
+    }
 
     function safeTransferFrom(address _from, address _to, uint256 _tokenId) public {
         ERC721.safeTransferFrom(_from, _to, _tokenId);
