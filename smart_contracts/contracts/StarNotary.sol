@@ -1,8 +1,10 @@
 pragma solidity ^0.4.23;
 
 import 'openzeppelin-solidity/contracts/token/ERC721/ERC721.sol';
+import 'ethereum-libraries-string-utils/contracts/StringUtilsLib.sol';
 
 contract StarNotary is ERC721 {
+    using StringUtilsLib for *;
 
     struct Star {
         string name;
@@ -21,9 +23,13 @@ contract StarNotary is ERC721 {
     }
 
     function createStar(string _name, string _story, string _cent, string _dec, string _mag, uint256 _tokenId) public {
-        Star memory newStar = Star(_name, _story, _cent, _dec, _mag);
+        string memory concat_cent = string(abi.encodePacked("cent_", _cent));
+        string memory concat_dec = string(abi.encodePacked("dec_", _dec));
+        string memory concat_mag = string(abi.encodePacked("mag_", _mag));
 
-        checkIfStarExist(_cent, _dec, _mag);
+        Star memory newStar = Star(_name, _story, concat_cent, concat_dec, concat_mag);
+
+        checkIfStarExist(concat_cent, concat_dec, concat_mag);
 
         _tokenIdToStarInfo[_tokenId] = newStar;
         _starsInUse.push(newStar);
@@ -60,7 +66,9 @@ contract StarNotary is ERC721 {
         }
 
         for (uint i = 0; i < _starsInUse.length; i++) {
-          if (keccak256(_starsInUse[i].cent) == keccak256(_cent) && keccak256(_starsInUse[i].dec) == keccak256(_dec) && keccak256(_starsInUse[i].mag) == keccak256(_mag)) {
+          Star memory existingStars = _starsInUse[i];
+          /* if (abi.encodePacked(string(existingStars.cent)) == abi.encodePacked(_cent) && string(existingStars.dec) == _dec && string(existingStars.mag) == _mag) { */
+          if (StringUtilsLib.equals(existingStars.cent.toSlice(), _cent.toSlice())) {
             return true;
           }
         }

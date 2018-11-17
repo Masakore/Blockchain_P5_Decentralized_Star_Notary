@@ -39,10 +39,29 @@
             </div>
 
             <div class="row">
-                <label class="bold" id="validation-error"></label>
+                <label class="bold">Star ID:</label>
+                <input id="star-id"></label>
             </div>
 
+            <div class="row">
+                <label class="bold" id="validation-error"></label>
+            </div>
             <button id="claim-button" onclick="claimButtonClicked()">Claim Star</button>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <label class="bold">Search By Star ID:</label>
+                <input id="search-id"></label>
+            </div>
+            <div class="row">
+                <label class="bold" id="search-error"></label>
+            </div>
+            <div class="row">
+                <label class="bold" id="search-result"></label>
+            </div>
+            <button id="search-button" onclick="findButtonClicked()">Search Star</button>
+
         </div>
 
         <script>
@@ -51,12 +70,12 @@
                 web3 = new Web3(web3.currentProvider) // what Metamask injected
             } else {
                 // Instantiate and set Ganache as your provider
-                web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+                web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
             }
-                web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+                web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
 
             // The default (top) wallet account from a list of test accounts
-            web3.eth.defaultAccount = web3.eth.accounts[0];
+            web3.eth.defaultAccount = web3.eth.accounts[0]
 
             // The interface definition for your smart contract (the ABI)
 
@@ -518,17 +537,52 @@
                 ]
             );
             // Grab the contract at specified deployed address with the interface defined by the ABI
-            var starNotary = StarNotary.at('0xe29c33d09daa53f18236bd30def779ec6b38580d');
+            var starNotary = StarNotary.at('0x139b6840f7baf59e95ef91ad70c79f2eb6d04f4d')
+
+            function findButtonClicked() {
+                let tokenId = parseInt(document.getElementById('search-id').value)
+                document.getElementById('search-error').innerText = ""
+                document.getElementById('search-result').innerText = ""
+
+                if (!tokenId) {
+                  document.getElementById('search-error').innerText = "Please enter valid star ID"
+                  return
+                }
+
+                document.getElementById('search-error').innerText = ""
+
+                web3.eth.getAccounts(function(error, accounts) {
+                    if (error) {
+                        console.log(error)
+                        return
+                    }
+                    const account = accounts[0]
+
+                    starNotary.tokenIdToStarInfo(tokenId, function(err, result) {
+                        if (!error) {
+                            if (!result[0]) {
+                                document.getElementById('search-result').innerText = "Not found"
+                                return
+                            }
+                            const starInfo = "name:" + result[0] + ", story:" + result[1] + ", dec:" + result[2] + ", mag:" + result[3] + ", cent:" + result[4]
+                            document.getElementById('search-result').innerText = starInfo
+                        } else {
+                            console.log(error)
+                        }
+                    })
+                })
+            }
 
             // Enable claim button being clicked
             function claimButtonClicked() {
-                const name = document.getElementById('star-name').value;
-                const story = document.getElementById('star-story').value;
-                const dec = document.getElementById('star-dec').value;
-                const mag = document.getElementById('star-mag').value;
-                const cent = document.getElementById('star-cent').value;
+                const name = document.getElementById('star-name').value
+                const story = document.getElementById('star-story').value
+                const dec = document.getElementById('star-dec').value
+                const mag = document.getElementById('star-mag').value
+                const cent = document.getElementById('star-cent').value
+                const tokenId = document.getElementById('star-id').value
 
-                if (!name || !story || !dec || !mag || !cent) {
+                if (!name || !story || !dec || !mag || !cent || !tokenId) {
                   document.getElementById('validation-error').innerText = "Please enter all the fields!"
                   return
                 }
@@ -536,18 +590,18 @@
 
                 web3.eth.getAccounts(function(error, accounts) {
                     if (error) {
-                        console.log(error);
-                        return;
+                        console.log(error)
+                        return
                     }
                     const account = accounts[0]
-                    starNotary.createStar(name, story, dec, mag, cent, account, function (error, result) {
-                        if (!error) {
-                            console.log('Success');
-                        } else {
-                            console.log(error);
-                        }
-                    });
 
+                    starNotary.createStar.sendTransaction(name, story, dec, mag, cent, tokenId, {from: account, gas:3000000}, function (error, result) {
+                        if (!error) {
+                            console.log('Success')
+                        } else {
+                            console.log(error)
+                        }
+                    })
                 })
             }
         </script>
