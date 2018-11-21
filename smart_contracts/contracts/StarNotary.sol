@@ -1,10 +1,8 @@
 pragma solidity ^0.4.23;
 
 import 'openzeppelin-solidity/contracts/token/ERC721/ERC721.sol';
-import 'ethereum-libraries-string-utils/contracts/StringUtilsLib.sol';
 
 contract StarNotary is ERC721 {
-    using StringUtilsLib for *;
 
     struct Star {
         string name;
@@ -23,18 +21,20 @@ contract StarNotary is ERC721 {
     }
 
     function createStar(string _name, string _story, string _cent, string _dec, string _mag, uint256 _tokenId) public {
-        string memory concat_cent = string(abi.encodePacked("cent_", _cent));
+        string memory concat_cent = string(abi.encodePacked("ra_", _cent));
         string memory concat_dec = string(abi.encodePacked("dec_", _dec));
         string memory concat_mag = string(abi.encodePacked("mag_", _mag));
 
         Star memory newStar = Star(_name, _story, concat_cent, concat_dec, concat_mag);
 
-        checkIfStarExist(concat_cent, concat_dec, concat_mag);
+        if (checkIfStarExist(concat_cent, concat_dec, concat_mag)) {
+          return;
+        }
 
         _tokenIdToStarInfo[_tokenId] = newStar;
         _starsInUse.push(newStar);
 
-        _mint(msg.sender, _tokenId);
+        mint(msg.sender, _tokenId);
     }
 
     function putStarUpForSale(uint256 _tokenId, uint256 _price) public {
@@ -64,15 +64,29 @@ contract StarNotary is ERC721 {
         if (_starsInUse.length == 0) {
           return false;
         }
+        string memory concat_cent = string(abi.encodePacked("ra_", _cent));
+        string memory concat_dec = string(abi.encodePacked("dec_", _dec));
+        string memory concat_mag = string(abi.encodePacked("mag_", _mag));
 
         for (uint i = 0; i < _starsInUse.length; i++) {
-          Star memory existingStars = _starsInUse[i];
-          /* if (abi.encodePacked(string(existingStars.cent)) == abi.encodePacked(_cent) && string(existingStars.dec) == _dec && string(existingStars.mag) == _mag) { */
-          if (StringUtilsLib.equals(existingStars.cent.toSlice(), _cent.toSlice())) {
+          Star storage existingStars = _starsInUse[i];
+          string memory cent_in_use = string(existingStars.cent);
+          string memory dec_in_use = string(existingStars.dec);
+          string memory mag_in_use = string(existingStars.mag);
+
+          if (hashCompareWithLengthCheck(cent_in_use, concat_cent) && hashCompareWithLengthCheck(dec_in_use, concat_dec) && hashCompareWithLengthCheck(mag_in_use, concat_mag)) {
             return true;
           }
         }
         return false;
+    }
+
+    function hashCompareWithLengthCheck(string a, string b) internal returns (bool) {
+        if(bytes(a).length != bytes(b).length) {
+            return false;
+        } else {
+            return keccak256(a) == keccak256(b);
+        }
     }
 
     function safeTransferFrom(address _from, address _to, uint256 _tokenId) public {

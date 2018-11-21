@@ -11,9 +11,9 @@ contract('StarNotary', accounts => {
         let defaultUser = accounts[0]
         let name = 'Star power 103!'
         let story = 'I love my wonderful star'
-        let cent = 'ra_032.155'
-        let dec = 'dec_121.874'
-        let mag = 'mag_245.978'
+        let cent = '032.155'
+        let dec = '121.874'
+        let mag = '245.978'
         let starId = 1
         let tx
 
@@ -31,12 +31,15 @@ contract('StarNotary', accounts => {
 
         it('can create a star and get its info', async function () {
             let result = await this.contract.tokenIdToStarInfo(starId)
+            let concat_cent = 'ra_032.155'
+            let concat_dec = 'dec_121.874'
+            let concat_mag = 'mag_245.978'
 
             assert.equal(result[0], name)
             assert.equal(result[1], story)
-            assert.equal(result[2], cent)
-            assert.equal(result[3], dec)
-            assert.equal(result[4], mag)
+            assert.equal(result[2], concat_cent)
+            assert.equal(result[3], concat_dec)
+            assert.equal(result[4], concat_mag)
         })
     })
 
@@ -47,9 +50,9 @@ contract('StarNotary', accounts => {
 
         let name = 'Star power 103!'
         let story = 'I love my wonderful star'
-        let cent = 'ra_032.155'
-        let dec = 'dec_121.874'
-        let mag = 'mag_245.978'
+        let cent = '032.155'
+        let dec = '121.874'
+        let mag = '245.978'
         let starId = 1
         let starPrice = web3.toWei(.01, "ether")
 
@@ -92,9 +95,9 @@ contract('StarNotary', accounts => {
 
         let name = 'Star power 103!'
         let story = 'I love my wonderful star'
-        let cent = 'ra_032.155'
-        let dec = 'dec_121.874'
-        let mag = 'mag_245.978'
+        let cent = '032.155'
+        let dec = '121.874'
+        let mag = '245.978'
         let starId = 1
         let starPrice = web3.toWei(.01, "ether")
 
@@ -121,9 +124,9 @@ contract('StarNotary', accounts => {
 
         let name = 'Star power 103!'
         let story = 'I love my wonderful star'
-        let cent = 'ra_032.155'
-        let dec = 'dec_121.874'
-        let mag = 'mag_245.978'
+        let cent = '032.155'
+        let dec = '121.874'
+        let mag = '245.978'
         let starId = 1
 
         it('return false if no star has been registered', async function() {

@@ -13,7 +13,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ethereum-libraries-string-utils": "^1.2.1",
     "openzeppelin-solidity": "2.0.0-rc.1",
     "truffle-hdwallet-provider": "0.0.6"
   }
