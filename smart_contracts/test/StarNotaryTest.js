@@ -136,7 +136,11 @@ contract('StarNotary', accounts => {
         it('return true if the star has been registered', async function() {
           await this.contract.createStar(name, story, cent, dec, mag, starId)
 
-          assert.equal(await this.contract.checkIfStarExist(cent, dec, mag), true)
+          let concat_cent = "ra_" + cent
+          let concat_dec = "dec_" + dec
+          let concat_mag = "mag_" + mag
+
+          assert.equal(await this.contract.checkIfStarExist(concat_cent, concat_dec, concat_mag), true)
         })
     })
 })
