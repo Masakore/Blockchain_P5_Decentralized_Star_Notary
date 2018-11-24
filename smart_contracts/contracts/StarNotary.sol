@@ -34,6 +34,7 @@ contract StarNotary is ERC721 {
         _tokenIdToStarInfo[_tokenId] = newStar;
         _starsInUse.push(newStar);
 
+        // Todo how to test if transfer failed?
         mint(msg.sender, _tokenId);
     }
 
@@ -64,17 +65,15 @@ contract StarNotary is ERC721 {
         if (_starsInUse.length == 0) {
           return false;
         }
-        string memory concat_cent = string(abi.encodePacked("ra_", _cent));
-        string memory concat_dec = string(abi.encodePacked("dec_", _dec));
-        string memory concat_mag = string(abi.encodePacked("mag_", _mag));
 
         for (uint i = 0; i < _starsInUse.length; i++) {
           Star storage existingStars = _starsInUse[i];
+
           string memory cent_in_use = string(existingStars.cent);
           string memory dec_in_use = string(existingStars.dec);
           string memory mag_in_use = string(existingStars.mag);
 
-          if (hashCompareWithLengthCheck(cent_in_use, concat_cent) && hashCompareWithLengthCheck(dec_in_use, concat_dec) && hashCompareWithLengthCheck(mag_in_use, concat_mag)) {
+          if (hashCompareWithLengthCheck(cent_in_use, _cent) && hashCompareWithLengthCheck(dec_in_use, _dec) && hashCompareWithLengthCheck(mag_in_use, _mag)) {
             return true;
           }
         }
