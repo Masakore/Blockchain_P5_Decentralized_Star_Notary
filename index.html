@@ -72,7 +72,6 @@
                 // Instantiate and set Ganache as your provider
                 web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
             }
-                web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
 
             // The default (top) wallet account from a list of test accounts
             web3.eth.defaultAccount = web3.eth.accounts[0]
@@ -537,7 +536,7 @@
                 ]
             );
             // Grab the contract at specified deployed address with the interface defined by the ABI
-            var starNotary = StarNotary.at('0xc626d5f4b6dfc87b7f995c9724b44d5c3126da0e')
+            var starNotary = StarNotary.at('0x8bdc524eb73712e2e88a59a5821160d0f6dff330')
 
             function undisplayMessage() {
               document.getElementById('search-error').innerText = ""
