@@ -537,12 +537,18 @@
                 ]
             );
             // Grab the contract at specified deployed address with the interface defined by the ABI
-            var starNotary = StarNotary.at('0x139b6840f7baf59e95ef91ad70c79f2eb6d04f4d')
+            var starNotary = StarNotary.at('0xc626d5f4b6dfc87b7f995c9724b44d5c3126da0e')
+
+            function undisplayMessage() {
+              document.getElementById('search-error').innerText = ""
+              document.getElementById('search-result').innerText = ""
+              document.getElementById('validation-error').innerText = ""
+            }
 
             function findButtonClicked() {
+                undisplayMessage()
                 let tokenId = parseInt(document.getElementById('search-id').value)
-                document.getElementById('search-error').innerText = ""
-                document.getElementById('search-result').innerText = ""
+
 
                 if (!tokenId) {
                   document.getElementById('search-error').innerText = "Please enter valid star ID"
@@ -575,6 +581,8 @@
 
             // Enable claim button being clicked
             function claimButtonClicked() {
+                undisplayMessage()
+
                 const name = document.getElementById('star-name').value
                 const story = document.getElementById('star-story').value
                 const dec = document.getElementById('star-dec').value
@@ -586,7 +594,6 @@
                   document.getElementById('validation-error').innerText = "Please enter all the fields!"
                   return
                 }
-                  document.getElementById('validation-error').innerText = ""
 
                 web3.eth.getAccounts(function(error, accounts) {
                     if (error) {
@@ -600,6 +607,7 @@
                             console.log('Success')
                         } else {
                             console.log(error)
+                            document.getElementById('validation-error').innerText = error
                         }
                     })
                 })
