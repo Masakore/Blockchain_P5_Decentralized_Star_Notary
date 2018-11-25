@@ -35,11 +35,45 @@ contract('StarNotary', accounts => {
             let concat_dec = 'dec_121.874'
             let concat_mag = 'mag_245.978'
 
-            assert.equal(result[0], name)
-            assert.equal(result[1], story)
-            assert.equal(result[2], concat_cent)
-            assert.equal(result[3], concat_dec)
-            assert.equal(result[4], concat_mag)
+            let star_should_be = [name, story, concat_cent, concat_dec, concat_mag]
+
+            assert.deepEqual(result, star_should_be)
+        })
+
+        it('transaction will be reverted if you try to register a duplicated starId', async function () {
+            let name2 = 'Good star'
+            let story2 = 'Found this star while looking up sky'
+            let cent2 = '032.021'
+            let dec2 = '120.390'
+            let mag2 = '123.339'
+
+            try {
+              await this.contract.createStar(name2, story2, cent2, dec2, mag2, starId, {from: defaultUser})
+            } catch(err) {
+              assert.equal(err.message, "VM Exception while processing transaction: revert")
+            }
+        })
+
+        it('transaction will be reverted if you try to register a starId equals to zero', async function() {
+            let name2 = 'Good star'
+            let story2 = 'Found this star while looking up sky'
+            let cent2 = '032.021'
+            let dec2 = '120.390'
+            let mag2 = '123.339'
+
+            try {
+                await this.contract.createStar(name2, story2, cent2, dec2, mag2, 0, {from: defaultUser})
+            } catch(err) {
+                assert.equal(err.message, "VM Exception while processing transaction: revert")
+            }
+        })
+
+        it('cannot register the same geometric star', async function() {
+            try {
+                await this.contract.createStar(name, story, cent, dec, mag, starId, {from: defaultUser})
+            } catch(err) {
+                assert.equal(err.message, "VM Exception while processing transaction: revert This Star is already exists!")
+            }
         })
     })
 
