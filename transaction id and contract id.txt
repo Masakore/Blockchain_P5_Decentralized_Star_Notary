@@ -1,2 +1,5 @@
 Transaction ID: 0x6b3bb3dca51ce1a8ef9822d46c39aaa3cd989f1a7f54e7e8f5497b842f07d7cb
 Contract ID: 0x8bdc524eb73712e2e88a59a5821160d0f6dff330
+
+createStar() transaction ID: 0xdb15e8995aff52c701fad9fc03947e567f01ce12e8951742453ae33ed3cb7cb9
+putStarUpForSale() transaction ID: 0x6d7846fd9f16fff1eedbbdfff5ba6d0a3d64a718480805a0b999bd3fcb8772d2
