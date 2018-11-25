@@ -14,7 +14,8 @@ contract StarNotary is ERC721 {
 
     mapping(uint256 => Star) private _tokenIdToStarInfo;
     mapping(uint256 => uint256) private _starsForSale;
-    Star[] public _starsInUse;
+    //Star[] public _starsInUse; -> gas consumption: around 3200000
+    mapping(bytes32 => bool) private _starsInUse; // gas consumption: 2564000. Much cheaper compared to Storage!
 
     function mint(address _to, uint256 _tokenId) internal {
       _mint(_to, _tokenId);
@@ -29,13 +30,15 @@ contract StarNotary is ERC721 {
 
         Star memory newStar = Star(_name, _story, concat_cent, concat_dec, concat_mag);
 
-        require(!checkIfStarExist(concat_cent, concat_dec, concat_mag), "This Star is already exists!");
+        bytes32 star_coodination_hash = keccak256(concat_cent, concat_dec, concat_mag);
+
+        require(!checkIfStarExist(star_coodination_hash), "This Star is already exists!");
+
+        mint(msg.sender, _tokenId);
 
         _tokenIdToStarInfo[_tokenId] = newStar;
-        _starsInUse.push(newStar);
 
-        // Todo how to test if transfer failed?
-        mint(msg.sender, _tokenId);
+        _starsInUse[star_coodination_hash] = true;
     }
 
     function putStarUpForSale(uint256 _tokenId, uint256 _price) public {
@@ -61,23 +64,8 @@ contract StarNotary is ERC721 {
         }
     }
 
-    function checkIfStarExist(string _cent, string _dec, string _mag) public view returns (bool){
-        if (_starsInUse.length == 0) {
-          return false;
-        }
-
-        for (uint i = 0; i < _starsInUse.length; i++) {
-          Star storage existingStars = _starsInUse[i];
-
-          string memory cent_in_use = string(existingStars.cent);
-          string memory dec_in_use = string(existingStars.dec);
-          string memory mag_in_use = string(existingStars.mag);
-
-          if (hashCompareWithLengthCheck(cent_in_use, _cent) && hashCompareWithLengthCheck(dec_in_use, _dec) && hashCompareWithLengthCheck(mag_in_use, _mag)) {
-            return true;
-          }
-        }
-        return false;
+    function checkIfStarExist(bytes32 star_coodination_hash) internal view returns (bool) {
+        return _starsInUse[star_coodination_hash] == true;
     }
 
     function hashCompareWithLengthCheck(string a, string b) internal returns (bool) {

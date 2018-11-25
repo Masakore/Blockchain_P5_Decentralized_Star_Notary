@@ -151,30 +151,30 @@ contract('StarNotary', accounts => {
         })
     })
 
-    describe('can check if a star already exists or not', () => {
-        let user1 = accounts[1]
-        let user2 = accounts[2]
-        let operator = accounts[3]
-
-        let name = 'Star power 103!'
-        let story = 'I love my wonderful star'
-        let cent = '032.155'
-        let dec = '121.874'
-        let mag = '245.978'
-        let starId = 1
-
-        it('return false if no star has been registered', async function() {
-          assert.equal(await this.contract.checkIfStarExist(cent, dec, mag), false)
-        })
-
-        it('return true if the star has been registered', async function() {
-          await this.contract.createStar(name, story, cent, dec, mag, starId)
-
-          let concat_cent = "ra_" + cent
-          let concat_dec = "dec_" + dec
-          let concat_mag = "mag_" + mag
-
-          assert.equal(await this.contract.checkIfStarExist(concat_cent, concat_dec, concat_mag), true)
-        })
-    })
+    // describe('can check if a star already exists or not', () => {
+    //     let user1 = accounts[1]
+    //     let user2 = accounts[2]
+    //     let operator = accounts[3]
+    //
+    //     let name = 'Star power 103!'
+    //     let story = 'I love my wonderful star'
+    //     let cent = '032.155'
+    //     let dec = '121.874'
+    //     let mag = '245.978'
+    //     let starId = 1
+    //
+    //     it('return false if no star has been registered', async function() {
+    //       assert.equal(await this.contract.checkIfStarExist(cent, dec, mag), false)
+    //     })
+    //
+    //     it('return true if the star has been registered', async function() {
+    //       await this.contract.createStar(name, story, cent, dec, mag, starId)
+    //
+    //       let concat_cent = "ra_" + cent
+    //       let concat_dec = "dec_" + dec
+    //       let concat_mag = "mag_" + mag
+    //
+    //       assert.equal(await this.contract.checkIfStarExist(concat_cent, concat_dec, concat_mag), true)
+    //     })
+    // })
 })
