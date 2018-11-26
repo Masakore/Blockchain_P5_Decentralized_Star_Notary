@@ -7,7 +7,7 @@ contract('StarNotary', accounts => {
         this.contract = await StarNotary.new({from: accounts[0]})
     })
 
-    describe('can create a star', () => {
+    contract('can create a star', () => {
         let defaultUser = accounts[0]
         let name = 'Star power 103!'
         let story = 'I love my wonderful star'
@@ -77,7 +77,7 @@ contract('StarNotary', accounts => {
         })
     })
 
-    describe('buying and selling stars', () => {
+    contract('buying and selling stars', () => {
         let user1 = accounts[1]
         let user2 = accounts[2]
         let randomMaliciousUser = accounts[3]
@@ -101,7 +101,7 @@ contract('StarNotary', accounts => {
             assert.equal(await this.contract.starsForSale(starId), starPrice)
         })
 
-        describe('user2 can buy a star that was put up for sale', () => {
+        contract('user2 can buy a star that was put up for sale', () => {
             beforeEach(async function () {
                 await this.contract.putStarUpForSale(starId, starPrice, {from: user1})
             })
@@ -122,7 +122,7 @@ contract('StarNotary', accounts => {
         })
     })
 
-    describe('can approve', () => {
+    contract('can approve', () => {
         let user1 = accounts[1]
         let user2 = accounts[2]
         let operator = accounts[3]
@@ -151,7 +151,7 @@ contract('StarNotary', accounts => {
         })
     })
 
-    // describe('can check if a star already exists or not', () => {
+    // contract('can check if a star already exists or not', () => {
     //     let user1 = accounts[1]
     //     let user2 = accounts[2]
     //     let operator = accounts[3]
